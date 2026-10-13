@@ -1,0 +1,19 @@
+{
+  "name": "shortcut-launcher",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A tiny, fast launcher for all your shortcuts.",
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "build:exe": "tauri build --no-bundle"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oncexhub/shortcut-launcher.git"
+  }
+}

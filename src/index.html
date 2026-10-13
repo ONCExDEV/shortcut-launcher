@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shortcut Launcher</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <div class="titlebar" data-tauri-drag-region>
+      <img class="logo" src="logo.svg" alt="" draggable="false">
+      <span class="title">Shortcut Launcher</span>
+      <button id="btn-hide" class="mini" title="Hide to tray (Esc)" aria-label="Hide to tray">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+
+    <header class="topbar">
+      <label class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="search" type="text" placeholder="Search all shortcuts" autocomplete="off" spellcheck="false">
+      </label>
+      <button id="btn-add" class="btn primary add" title="Add shortcuts (Ctrl+N)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add
+      </button>
+      <button id="btn-settings" class="icon-btn" title="Settings" aria-label="Settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      </button>
+    </header>
+
+    <div class="body">
+      <nav class="sidebar">
+        <div class="side-label">Groups</div>
+        <div id="groups" class="groups"></div>
+        <button id="add-group" class="ghost-btn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          New group
+        </button>
+      </nav>
+
+      <main class="main">
+        <div class="head">
+          <div class="head-text">
+            <h1 id="head-title"></h1>
+            <span id="head-meta"></span>
+          </div>
+          <button id="btn-launch-all" class="btn" hidden>Open all</button>
+          <div id="sel-bar" class="gap" hidden>
+            <button id="sel-open" class="btn">Open</button>
+            <button id="sel-move" class="btn">Move to…</button>
+            <button id="sel-remove" class="btn danger">Remove</button>
+            <button id="sel-clear" class="btn">Clear</button>
+          </div>
+        </div>
+        <div class="content">
+          <div id="grid" class="grid"></div>
+          <div id="empty" class="empty" hidden></div>
+        </div>
+        <div id="drop" class="drop" hidden><span>Drop to add</span></div>
+      </main>
+    </div>
+
+    <footer class="foot">
+      <span id="foot-left"></span>
+      <span id="foot-right"></span>
+    </footer>
+  </div>
+
+  <div id="menu" class="menu" hidden></div>
+  <div id="toast" class="toast" hidden></div>
+
+  <dialog id="dlg-item">
+    <form id="form-item" autocomplete="off">
+      <h2 id="item-title">Add shortcut</h2>
+      <label>Name
+        <input id="f-name" class="field" type="text" required>
+      </label>
+      <label>Target
+        <div class="row">
+          <input id="f-target" class="field" type="text" required placeholder="App, file, folder or https:// link">
+          <button type="button" id="b-file" class="btn">File</button>
+          <button type="button" id="b-folder" class="btn">Folder</button>
+        </div>
+      </label>
+      <label>Arguments <span class="opt">optional</span>
+        <input id="f-args" class="field" type="text">
+      </label>
+      <label class="check"><input id="f-admin" type="checkbox"> Run as administrator</label>
+      <div class="actions">
+        <button type="button" id="item-cancel" class="btn">Cancel</button>
+        <button type="submit" class="btn primary">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-apps" class="wide">
+    <h2>Add apps</h2>
+    <input id="a-search" class="field" type="text" placeholder="Filter your installed apps" autocomplete="off" spellcheck="false">
+    <div id="a-list" class="picklist"></div>
+    <div class="actions between">
+      <span id="a-count" class="muted">0 selected</span>
+      <span class="gap">
+        <button type="button" id="a-all" class="btn">Select shown</button>
+        <button type="button" id="a-cancel" class="btn">Cancel</button>
+        <button type="button" id="a-add" class="btn primary">Add</button>
+      </span>
+    </div>
+  </dialog>
+
+  <dialog id="dlg-settings" class="wide">
+    <h2>Settings</h2>
+
+    <div class="section">General</div>
+    <div class="setting">
+      <div><strong>Hotkey</strong><small>Open or hide the launcher from anywhere</small></div>
+      <button id="s-hotkey" class="btn key"></button>
+    </div>
+    <label class="setting">
+      <div><strong>Open with a double-click</strong><small>A single click only selects, like on your desktop</small></div>
+      <input id="s-dbl" type="checkbox" class="switch">
+    </label>
+    <label class="setting">
+      <div><strong>Hide after opening something</strong><small>Hide the window once you start a shortcut</small></div>
+      <input id="s-close" type="checkbox" class="switch">
+    </label>
+    <label class="setting">
+      <div><strong>Always on top</strong><small>Keep the window above other windows</small></div>
+      <input id="s-top" type="checkbox" class="switch">
+    </label>
+    <label class="setting">
+      <div><strong>Start with Windows</strong><small>Starts quietly in the tray</small></div>
+      <input id="s-auto" type="checkbox" class="switch">
+    </label>
+    <label class="setting">
+      <div><strong>Theme</strong></div>
+      <select id="s-theme" class="field select">
+        <option value="system">System</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+    </label>
+
+    <div class="section">Shortcuts</div>
+    <div class="setting">
+      <div>
+        <strong>Shortcuts folder</strong>
+        <small id="s-sfolder" class="path"></small>
+      </div>
+      <span class="gap">
+        <button id="s-choose" class="btn">Choose</button>
+        <button id="s-fix" class="btn">Fix broken</button>
+      </span>
+    </div>
+    <div class="setting">
+      <div><strong>Save everything to the folder</strong><small>Give every shortcut you already have its own file there</small></div>
+      <button id="s-sync" class="btn">Save all</button>
+    </div>
+    <div class="setting">
+      <div><strong>Desktop shortcut</strong><small>Put a Shortcut Launcher icon on your desktop</small></div>
+      <button id="s-desktop" class="btn">Create</button>
+    </div>
+    <div class="setting">
+      <div><strong>Refresh icons</strong><small>Fetch every icon again, sharp and without frames</small></div>
+      <button id="s-icons" class="btn">Refresh</button>
+    </div>
+    <div class="setting">
+      <div><strong>Import desktop items</strong><small>Copy everything on your desktop into a group</small></div>
+      <button id="s-import" class="btn">Import</button>
+    </div>
+
+    <div class="section">Your data</div>
+    <div class="setting">
+      <div><strong>Backup</strong><small>Saved automatically. Export a copy or restore one.</small></div>
+      <span class="gap">
+        <button id="s-export" class="btn">Export</button>
+        <button id="s-restore" class="btn">Restore</button>
+      </span>
+    </div>
+    <div class="setting">
+      <div><strong>Data folder</strong><small>Shortcuts, backups and the log live here</small></div>
+      <button id="s-folder" class="btn">Open</button>
+    </div>
+
+    <div class="actions between">
+      <button id="s-quit" class="btn danger">Quit launcher</button>
+      <button id="s-done" class="btn primary">Done</button>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>

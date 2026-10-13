@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bg" x1="0.1" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#74a8ff"/>
+      <stop offset="0.5" stop-color="#3f6ff2"/>
+      <stop offset="1" stop-color="#3a2cd2"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.34"/>
+      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="1.05" r="0.75">
+      <stop offset="0" stop-color="#8f6bff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#8f6bff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#d3defe"/>
+    </linearGradient>
+    <linearGradient id="hot" x1="0.1" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#ffe083"/>
+      <stop offset="0.5" stop-color="#ffab45"/>
+      <stop offset="1" stop-color="#ff6a4a"/>
+    </linearGradient>
+    <filter id="drop" x="-25%" y="-25%" width="150%" height="160%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#0a1560" flood-opacity="0.38"/>
+    </filter>
+    <filter id="boltshadow" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#9a2d12" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <rect x="32" y="32" width="960" height="960" rx="228" fill="url(#bg)"/>
+  <rect x="32" y="32" width="960" height="960" rx="228" fill="url(#glow)"/>
+  <rect x="32" y="32" width="960" height="960" rx="228" fill="url(#shine)"/>
+  <rect x="35" y="35" width="954" height="954" rx="225" fill="none" stroke="#ffffff" stroke-opacity="0.28" stroke-width="4"/>
+
+  <g filter="url(#drop)">
+    <rect x="190" y="190" width="300" height="300" rx="76" fill="url(#tile)"/>
+    <rect x="534" y="190" width="300" height="300" rx="76" fill="url(#hot)"/>
+    <rect x="190" y="534" width="300" height="300" rx="76" fill="url(#tile)"/>
+    <rect x="534" y="534" width="300" height="300" rx="76" fill="url(#tile)"/>
+  </g>
+
+  <path filter="url(#boltshadow)" fill="#ffffff" d="M728 226 L610 372 H676 L648 462 L766 312 H700 Z"/>
+</svg>
