@@ -309,7 +309,7 @@ function emptyHtml() {
   const lead = welcome
     ? 'Add your apps, files and folders once. After that you can open anything with a hotkey and a quick search.'
     : 'Add shortcuts to this group, or drag them in from another group.';
-  return `<div>${welcome ? '<img class="hero" src="logo.svg" alt="">' : ''}<h2>${welcome ? 'Welcome to Shortcut Launcher' : 'This group is empty'}</h2><p>${lead} You can also drop files into this window.</p>
+  return `<div>${welcome ? '<img class="hero" src="logo.png" alt="">' : ''}<h2>${welcome ? 'Welcome to Shortcut Launcher' : 'This group is empty'}</h2><p>${lead} You can also drop files into this window.</p>
     <div class="btns"><button class="btn primary" data-act="apps">Add apps</button><button class="btn" data-act="files">Add files</button><button class="btn" data-act="desktop">Import desktop</button></div></div>`;
 }
 
